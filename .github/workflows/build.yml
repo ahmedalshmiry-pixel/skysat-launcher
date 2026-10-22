@@ -19,9 +19,14 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Build APK with Gradle
+    - name: Accept Android Licenses
       run: |
-        gradle wrapper
+        yes | cmdline-tools/latest/bin/sdkmanager --licenses || true
+
+    - name: Generate Wrapper and Build APK
+      run: |
+        gradle wrapper --gradle-version 8.0.2
+        chmod +x gradlew
         ./gradlew assembleDebug --no-daemon --stacktrace
 
     - name: Upload APK
